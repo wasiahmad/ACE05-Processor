@@ -1,0 +1,4 @@
+ufal.udpipe
+prettytable
+tqdm
+conllu
