@@ -1,13 +1,13 @@
 # ACE05-Processor
 
-The [ACE 2005](https://catalog.ldc.upenn.edu/LDC2006T06) dataset contains entity, relation, and event annotations for an assortment of newswire and online text. To the best of my knowledge, there are no publicly available implementation to preprocess the ACE05 dataset that supports all the 3 languages, Arabic, Chinese, and English. Hence, I decided to build a pipeline that can process the raw files from ACE05 and dump the processed data into nice JSON format.
+The [ACE 2005](https://catalog.ldc.upenn.edu/LDC2006T06) dataset contains entity, relation, and event annotations for an assortment of newswire and online text. To the best of my knowledge, there are no publicly available implementation to preprocess the ACE05 dataset that supports all the three languages, Arabic, Chinese, and English. Hence, I decided to build a pipeline that can process the raw files from ACE05 and dump the processed data in JSON format.
 
 **[Note]** We use UDPipe v2.5 models to perform preprocessing on all the languages. 
 
 ## ACE 2005
 
 I assume the ACE 2005 is downloaded and kept in a directory `ace_2005` at the root directory of this repository.
-The tree structure of the directory hierarchy (upto level 3) is shown below.
+The tree structure of the directory hierarchy (up to level 3) is shown below.
 
 ```
 ace_2005
@@ -41,7 +41,7 @@ ace_2005
 
 The entire preprocessing can be executed by running the [setup.sh](https://github.com/wasiahmad/ACE05-Processor/blob/master/setup.sh) script. Please make sure the required packages are installed as listed in [requirements.txt](https://github.com/wasiahmad/ACE05-Processor/blob/master/requirements.txt) before starting the preprocessing.
 
-Once the preprocessing is done, we will get the data under the `processed-data` directory. The structure of the directory (upto level 2) would be as follows.
+Once the preprocessing is done, we will get the data under the `processed-data` directory. The structure of the directory (up to level 2) would be as follows.
 
 ```
 processed-data
@@ -82,12 +82,12 @@ APW_ENG_20030406.0191.v1.json
 APW_ENG_20030406.0191.v2.json 
 ```
 
-Where, `APW_ENG_20030406.0191` is a document filename. To learn about the `conllu`, `v1.json`, and `v2.json` files, keep reading the details.
+Where `APW_ENG_20030406.0191` is a document filename. To learn about the `conllu`, `v1.json`, and `v2.json` files, keep reading the details.
 
 
 ## Details of Preprocessing
 
-The following is the description of how I perform the preprocessing. There are two steps in the dataset preprocessing.
+The following is a description of how I perform the preprocessing. There are two steps in the dataset preprocessing.
 
 - **[Step1]** Extract the entities, events, and relations from the raw ACE05 dataset.
 - **[Step2]** Extract the word indices for the entities, events, and relations. Due to the complexity of matching character indices to the word indices, after preprocessing the ACE05 dataset, we lose a few entity/event/relation information.
@@ -97,7 +97,7 @@ The following is the description of how I perform the preprocessing. There are t
 
 In step1, we segment the raw document files (with `.sgm` extension, e.g., `bn/adj/NTV20001002.1530.0917.sgm`) into sentences and extract the entity, relations and event information from the raw files (with `.apf.xml` extension, e.g., `bn/adj/NTV20001002.1530.0917.apf.xml`). The outputs will be stored in `.conllu` and `v1.json` files.
 
-Once the step1 is finished, we will see a summary of the extracted entities, relations and events as follows.
+Once the step1 is finished, we will see a summary of the extracted entities, relations, and events as follows.
 
 ```
 ******************** English ********************
@@ -145,7 +145,7 @@ Once the step1 is finished, we will see a summary of the extracted entities, rel
 
 ### Step2
 
-In step2, we resolve he character-level indices to word-level indices for the spans associated with entities, relations, and events. To do that, we use the character offsets provided by UDPipe and match them with the character-offsets provided in the ACE05 dataset. The outputs will be stored in `v2.json` files.
+In step2, we resolve the character-level indices to word-level indices for the spans associated with entities, relations, and events. To do that, we use the character offsets provided by UDPipe and match them with the character-offsets provided in the ACE05 dataset. The outputs will be stored in `v2.json` files.
 
 Once the step2 is finished, we will see a summary as follows.
 
@@ -349,12 +349,12 @@ Here, we present one example of entities, relations, and events that we extract 
 
 - Following previous work, timex2 and value mentions are not treated as entity mentions and are skipped.
 - We drop the entities/relations/events if we are unable to resolve their (or their head's/trigger's) word indices.
-- We assume entity spans do not cross sentence boundaries. (Otherwise they are ignored)
+- We assume entity spans do not cross sentence boundaries. (Otherwise, they are ignored)
 - According to the conllu format, we assume `sent_id` 1 refers to the first sentence in a document.
 
 ### FAQ
 
-- How do we map character-level offsets to word-level offsets for the entities, heads and triggers?
+- How do we map character-level offsets to word-level offsets for the entities, heads, and triggers?
 
 We use the `Tokenrange` information provided by UDPipe and match them with the character-level offsets provided in the ACE05 dataset. According to the API documentation of UDPipe (see [more](https://ufal.mff.cuni.cz/udpipe/api-reference)):
 
@@ -365,13 +365,13 @@ We use the `Tokenrange` information provided by UDPipe and match them with the c
 
 We drop (do not include in the processed output) the entities/relations/events if we are unable to resolve their character-level offsets to word-level offsets.
 
-- What does skipped entities mean?
+- What do skipped entities mean?
 
 Following previous work, timex2 and value mentions are not treated as entity mentions and are skipped.
 
-- What does wrong head or wrong trigger mean?
+- What does the wrong head or wrong trigger mean?
 
-If we are unable to resolve the character-level offset to a word-level offset for entity-heads or event-triggers, we label them as wrong heads or triggers. We ignore such entities and events.
+We label entity-heads or event-triggers as wrong heads or triggers if we are unable to resolve the character-level offset to a word-level offset. We ignore such entities and events.
 
 
 ## Contact
